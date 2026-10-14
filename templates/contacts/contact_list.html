@@ -1,0 +1,323 @@
+<style>
+    /* Contact List (Asosiy sahifa) uchun Stil */
+
+/* Sarlavha qismi va Add Contact tugmasi */
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+/* Statistik kartochkalar bloki */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.stat-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.stat-caption {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* Asosiy panel va jadval */
+.panel {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.panel-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+}
+
+.contact-count {
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.08);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Jadval dizayni */
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+td {
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text-primary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Person (Avatar + Ism) */
+.person {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: var(--accent-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.person-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.person-caption {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.phone {
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Harakatlar (Actions) tugmalari */
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-link {
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--accent-color);
+    background: rgba(56, 189, 248, 0.1);
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    transition: all 0.2s ease;
+}
+
+.action-link:hover {
+    background: rgba(56, 189, 248, 0.2);
+    transform: translateY(-1px);
+}
+
+.action-link.delete {
+    color: #FF5F56;
+    background: rgba(255, 95, 86, 0.1);
+    border-color: rgba(255, 95, 86, 0.2);
+}
+
+.action-link.delete:hover {
+    background: rgba(255, 95, 86, 0.2);
+}
+
+/* Kontaktlar bo'sh bo'lgandagi holat (Empty state) */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.empty-state strong {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.empty-state p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+</style>
+{% extends 'contacts/base.html' %}
+
+{% block title %}Contact Book — Contacts{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">YOUR WORKSPACE</p>
+        <h1>Contact Book</h1>
+        <p class="subtitle">
+            Barcha kontaktlaringizni bir joyda boshqaring.
+        </p>
+    </div>
+
+    <a href="{% url 'contact_create' %}" class="button">
+        <span>＋</span> Add Contact
+    </a>
+</div>
+
+<div class="stats">
+    <div class="stat-card">
+        <div class="stat-label">TOTAL CONTACTS</div>
+        <div class="stat-number">{{ contacts|length }}</div>
+        <div class="stat-caption">Bazadagi barcha kontaktlar</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">DATA FIELDS</div>
+        <div class="stat-number">03</div>
+        <div class="stat-caption">Name, phone, created_at</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-label">WORKSPACE</div>
+        <div class="stat-number">CRUD</div>
+        <div class="stat-caption">Create · Read · Update · Delete</div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h2>All Contacts</h2>
+        <span class="contact-count">
+            {{ contacts|length }} ta kontakt
+        </span>
+    </div>
+
+    {% if contacts %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Contact</th>
+                    <th>Phone Number</th>
+                    <th>Date Added</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for contact in contacts %}
+                <tr>
+                    <td>
+                        <div class="person">
+                            <div class="avatar">
+                                {{ contact.name|first|upper }}
+                            </div>
+
+                            <div>
+                                <div class="person-name">
+                                    {{ contact.name }}
+                                </div>
+                                <div class="person-caption">
+                                    Contact #{{ contact.pk }}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="phone">{{ contact.phone }}</td>
+
+                    <td>{{ contact.created_at|date:"d.m.Y H:i" }}</td>
+
+                    <td>
+                        <div class="actions">
+                            <a class="action-link"
+                               href="{% url 'contact_update' contact.pk %}">
+                                Edit
+                            </a>
+
+                            <a class="action-link delete"
+                               href="{% url 'contact_delete' contact.pk %}">
+                                Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <div style="font-size: 34px;">◎</div>
+        <strong>Hozircha kontaktlar yo‘q</strong>
+        <p>Birinchi kontaktingizni qo‘shishdan boshlang.</p>
+        <a href="{% url 'contact_create' %}" class="button">
+            ＋ Kontakt qo‘shish
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

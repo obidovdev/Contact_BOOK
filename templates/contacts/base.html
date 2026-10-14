@@ -1,0 +1,285 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Contact Book{% endblock %}</title>
+
+<style>
+    /* Asosiy o'zgaruvchilar va shrift */
+:root {
+    --bg-gradient: linear-gradient(135deg, #6EE7B7 0%, #3B82F6 50%, #9333EA 100%);
+    --glass-bg: rgba(255, 255, 255, 0.12);
+    --glass-bg-hover: rgba(255, 255, 255, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.25);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    --text-primary: rgba(255, 255, 255, 0.95);
+    --text-secondary: rgba(255, 255, 255, 0.65);
+    --accent-color: #38BDF8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-primary);
+    padding: 20px;
+}
+
+/* Desktop oyna (Window wrapper) */
+.desktop {
+    width: 100%;
+    max-width: 1100px;
+    height: 700px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    box-shadow: var(--glass-shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Yuqori panel (Topbar) */
+.topbar {
+    height: 52px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.window-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot.red { background-color: #FF5F56; border: 0.5px solid rgba(0,0,0,0.1); }
+.dot.yellow { background-color: #FFBD2E; border: 0.5px solid rgba(0,0,0,0.1); }
+.dot.green { background-color: #27C93F; border: 0.5px solid rgba(0,0,0,0.1); }
+
+.topbar-title {
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.2px;
+}
+
+.brand-icon {
+    color: var(--accent-color);
+}
+
+.topbar-right {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+}
+
+/* Asosiy qism layout */
+.app-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background: rgba(255, 255, 255, 0.03);
+    border-right: 1px solid var(--glass-border);
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sidebar-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    padding-left: 12px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+    background: var(--glass-bg-hover);
+    transform: translateX(2px);
+}
+
+.nav-item.active {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.nav-icon {
+    font-size: 16px;
+}
+
+.nav-arrow {
+    margin-left: auto;
+    color: var(--text-secondary);
+}
+
+/* Sidebar ichidagi kichik eslatma bloki */
+.sidebar-note {
+    margin-top: auto;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.note-icon {
+    color: var(--accent-color);
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.sidebar-note h3 {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.sidebar-note p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Sidebar pastki holat paneli */
+.sidebar-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    padding-left: 12px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #27C93F;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #27C93F;
+}
+
+/* Asosiy kontent oynasi */
+.main-content {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 30px;
+    overflow-y: auto;
+}
+
+/* Scrollbar dizayni iOS uslubida */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+</style>
+</head>
+<body>
+    <div class="desktop">
+        <header class="topbar">
+            <div class="window-controls">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+            </div>
+
+            <div class="topbar-title">
+                <span class="brand-icon">✳</span>
+                Contact Book
+            </div>
+
+            <div class="topbar-right">PERSONAL CONTACTS</div>
+        </header>
+
+        <div class="app-layout">
+            <aside class="sidebar">
+                <div class="sidebar-label">WORKSPACE</div>
+
+                <a class="nav-item {% if request.resolver_match.url_name == 'contact_list' %}active{% endif %}"
+                   href="{% url 'contact_list' %}">
+                    <span class="nav-icon">▦</span>
+                    All Contacts
+                    <span class="nav-arrow">›</span>
+                </a>
+
+                <div class="sidebar-note">
+                    <div class="note-icon">✦</div>
+                    <h3>Stay connected.</h3>
+                    <p>All your important people, organized in one place.</p>
+                </div>
+
+                <div class="sidebar-footer">
+                    <span class="status-dot"></span>
+                    Local workspace
+                </div>
+            </aside>
+
+            <main class="main-content">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+</body>
+</html>

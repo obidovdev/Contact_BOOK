@@ -1,0 +1,167 @@
+<style>
+    /* Delete Contact Sahifasi uchun Stil */
+
+.page-heading {
+    margin-bottom: 24px;
+}
+
+.eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.page-heading h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+}
+
+.subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* O'chirishni tasdiqlash kartochkasi */
+.confirm-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 32px;
+    max-width: 500px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.confirm-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 95, 86, 0.15);
+    border: 1px solid rgba(255, 95, 86, 0.3);
+    color: #FF5F56;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.confirm-box h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+.confirm-box p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.contact-highlight {
+    color: var(--text-primary);
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+/* Forma tugmalari */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.button {
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-danger {
+    background: rgba(255, 59, 48, 0.85);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(255, 59, 48, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.button-danger:hover {
+    background: rgba(255, 59, 48, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(255, 59, 48, 0.4);
+}
+
+.button-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+}
+
+.button-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+</style>
+{% extends 'contacts/base.html' %}
+
+{% block title %}Delete Contact — Contact Book{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">CONTACT MANAGEMENT</p>
+        <h1>Delete Contact</h1>
+        <p class="subtitle">
+            Ushbu amalni bajarishdan oldin ma’lumotlarni tekshiring.
+        </p>
+    </div>
+</div>
+
+<div class="confirm-box">
+    <div class="confirm-icon">!</div>
+
+    <h2>Kontaktni o‘chirmoqchimisiz?</h2>
+
+    <p>
+        <span class="contact-highlight">{{ contact.name }}</span>
+        kontaktini o‘chirishni tasdiqlang.
+        Bu amalni qaytarib bo‘lmaydi.
+    </p>
+
+    <p>
+        Telefon: <span class="contact-highlight">{{ contact.phone }}</span>
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-actions">
+            <button type="submit" class="button button-danger">
+                Ha, o‘chirish
+            </button>
+
+            <a href="{% url 'contact_list' %}"
+               class="button button-secondary">
+                Bekor qilish
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

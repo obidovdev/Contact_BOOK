@@ -1,0 +1,156 @@
+<style>
+/* Contact Form Sahifasi uchun Stil */
+
+.form-panel {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 32px;
+    max-width: 550px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+.form-panel form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-panel p {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+}
+
+.form-panel label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.1px;
+}
+
+/* Django form input maydonlarini iOS uslubiga keltirish */
+.form-panel input[type="text"],
+.form-panel input[type="email"],
+.form-panel input[type="tel"],
+.form-panel input[type="number"],
+.form-panel textarea,
+.form-panel select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+}
+
+.form-panel input:focus,
+.form-panel textarea:focus,
+.form-panel select:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
+}
+
+/* Yordamchi matn va xatoliklar */
+.helptext {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0 0;
+    color: #FF5F56;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.nonfield {
+    background: rgba(255, 95, 86, 0.1);
+    border: 1px solid rgba(255, 95, 86, 0.2);
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: #FF5F56;
+    font-size: 13px;
+}
+
+/* Asosiy Saqlash tugmasi */
+.form-actions .button:not(.button-secondary) {
+    background: rgba(56, 189, 248, 0.85);
+    color: #0f172a;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-weight: 600;
+}
+
+.form-actions .button:not(.button-secondary):hover {
+    background: rgba(56, 189, 248, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.4);
+}
+</style>
+{% extends 'contacts/base.html' %}
+
+{% block title %}{{ title }} — Contact Book{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <div>
+        <p class="eyebrow">CONTACT MANAGEMENT</p>
+        <h1>{{ title }}</h1>
+        <p class="subtitle">
+            Kontakt ma’lumotlarini quyidagi forma orqali kiriting.
+        </p>
+    </div>
+</div>
+
+<div class="form-panel">
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        {% for field in form %}
+            <p>
+                <label for="{{ field.id_for_label }}">
+                    {% if field.name == 'name' %}
+                        Full Name
+                    {% elif field.name == 'phone' %}
+                        Phone Number
+                    {% else %}
+                        {{ field.label }}
+                    {% endif %}
+                </label>
+
+                {{ field }}
+
+                {% if field.help_text %}
+                    <span class="helptext">{{ field.help_text }}</span>
+                {% endif %}
+
+                {{ field.errors }}
+            </p>
+        {% endfor %}
+
+        <div class="form-actions">
+            <button type="submit" class="button">
+                ✓ Saqlash
+            </button>
+
+            <a href="{% url 'contact_list' %}"
+               class="button button-secondary">
+                Bekor qilish
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
